@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Register} from '../../util/Interfaces';
+import {Login} from '../../util/Interfaces';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import {
   View,
@@ -9,16 +10,15 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const LoginForm = ({navigation}: Register) => {
+const LoginForm = ({navigation}: Login) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const handleLogin = () => {
+  const handleValidation = () => {
     const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const passwordIsValid = password.length >= 8;
 
-    if (emailIsValid && passwordIsValid) {
-    } else {
+    if (!emailIsValid || !passwordIsValid) {
       Toast.show({
         type: 'error',
         text1: 'Invalid Input',
@@ -26,9 +26,56 @@ const LoginForm = ({navigation}: Register) => {
         position: 'top',
         visibilityTime: 3000,
       });
+      return;
+    }
+    return true;
+  };
+  const handleLogin = async () => {
+    if (!handleValidation()) {
+      return;
+    }
+    try {
+      const aUserData: string | null = await AsyncStorage.getItem('userData');
+      const userData: any = aUserData ? JSON.parse(aUserData) : [];
+
+      let user: any = userData.find((u: any) => {
+        return email.trim() === u.email;
+      });
+
+      if (user) {
+        if (password.trim() === user.password) {
+          navigation.navigate({
+            name: 'BottomTabs',
+            params: {userId: user.id},
+          });
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'User not found',
+            text2: 'The provided email does not exist',
+            position: 'top',
+            visibilityTime: 3000,
+          });
+        }
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Login',
+          text2: 'User not registered. Please register first',
+          position: 'top',
+          visibilityTime: 3000,
+        });
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Login',
+        text2: 'Login Failed!',
+        position: 'top',
+        visibilityTime: 3000,
+      });
     }
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.header}>

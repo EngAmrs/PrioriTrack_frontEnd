@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Login} from '../../util/Interfaces';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import {
   View,
@@ -65,11 +66,50 @@ const RegisterForm = ({navigation}: Login) => {
       });
       return;
     }
+    return true;
   };
 
   // Register
-  const handleRegister = () => {
-    handlValidation();
+  const handleRegister = async () => {
+    if (!handlValidation()) {
+      return;
+    }
+
+    try {
+      const aCurrentUserData = await AsyncStorage.getItem('userData');
+      let currentUserData = aCurrentUserData
+        ? JSON.parse(aCurrentUserData)
+        : [];
+      const userData = {
+        id: aCurrentUserData
+          ? currentUserData[currentUserData.length - 1].id + 1
+          : 1,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+      };
+
+      currentUserData.push(userData);
+      await AsyncStorage.setItem('userData', JSON.stringify(currentUserData));
+
+      Toast.show({
+        type: 'success',
+        text1: 'Sign Up',
+        text2: 'Registration successful!',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+      navigation.navigate({name: 'Login', params: {}});
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Sign Up',
+        text2: 'Registration Failed! ',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+    }
   };
 
   return (

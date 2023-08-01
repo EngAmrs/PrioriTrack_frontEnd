@@ -5,4 +5,8 @@ export interface Register {
 }
 export interface Login {
   navigation: NavigationProp<Record<string, object>>;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }
