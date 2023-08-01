@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Login} from '../../util/Interfaces';
+import Toast from 'react-native-toast-message';
 import {
   View,
   Text,
@@ -14,8 +15,61 @@ const RegisterForm = ({navigation}: Login) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  // Validations
+  const handlValidation = () => {
+    const firstNameValid = firstName.length <= 15 && firstName.length >= 3;
+    const lastNameValid = lastName.length <= 15 && lastName.length >= 3;
+    const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const passwordIsValid = password.length >= 8;
+
+    if (firstName.trim() === '' || !firstNameValid) {
+      Toast.show({
+        type: 'error',
+        text1: 'First Name',
+        text2: 'Must be at least 3 characters and maximum 15',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+      return;
+    }
+
+    if (lastName.trim() === '' || !lastNameValid) {
+      Toast.show({
+        type: 'error',
+        text1: 'Last Name',
+        text2: 'Must be at least 3 characters and maximum 15',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+      return;
+    }
+
+    if (email.trim() === '' || !emailIsValid) {
+      Toast.show({
+        type: 'error',
+        text1: 'Email',
+        text2: 'Invaild Format',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+      return;
+    }
+
+    if (password.trim() === '' || !passwordIsValid) {
+      Toast.show({
+        type: 'error',
+        text1: 'Password',
+        text2: 'Must be at least 8 characters',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+      return;
+    }
+  };
+
+  // Register
   const handleRegister = () => {
-    console.log('test');
+    handlValidation();
   };
 
   return (

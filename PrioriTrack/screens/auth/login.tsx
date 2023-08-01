@@ -18,7 +18,6 @@ const LoginForm = ({navigation}: Register) => {
     const passwordIsValid = password.length >= 8;
 
     if (emailIsValid && passwordIsValid) {
-      // You can call an API for authentication here
     } else {
       Toast.show({
         type: 'error',
