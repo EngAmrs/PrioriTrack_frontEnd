@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Register} from '../../util/Interfaces';
+import Toast from 'react-native-toast-message';
 import {
   View,
   Text,
@@ -13,7 +14,20 @@ const LoginForm = ({navigation}: Register) => {
   const [password, setPassword] = useState<string>('');
 
   const handleLogin = () => {
-    console.log('test');
+    const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const passwordIsValid = password.length >= 8;
+
+    if (emailIsValid && passwordIsValid) {
+      // You can call an API for authentication here
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Input',
+        text2: 'Please enter a valid email and password.',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+    }
   };
 
   return (
@@ -39,6 +53,11 @@ const LoginForm = ({navigation}: Register) => {
           onChangeText={setPassword}
           secureTextEntry
         />
+        {/* Forgot Password */}
+        <TouchableOpacity
+          onPress={() => navigation.navigate({name: 'Login', params: {}})}>
+          <Text style={styles.forgotPass}>Forgot Password?</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
@@ -77,7 +96,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    flexBasis: '25%',
+    flexBasis: '30%',
   },
   label: {
     fontSize: 16,
@@ -91,6 +110,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 16,
     paddingHorizontal: 10,
+  },
+  forgotPass: {
+    marginBottom: 10,
   },
   button: {
     backgroundColor: 'green',
