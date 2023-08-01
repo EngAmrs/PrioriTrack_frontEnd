@@ -53,7 +53,7 @@ const LoginForm = ({navigation}: Register) => {
         <TouchableOpacity
           style={styles.createAccountButton}
           onPress={() => navigation.navigate({name: 'Register', params: {}})}>
-          <Text style={styles.createAccountButtonText}>Register</Text>
+          <Text style={styles.createAccountButtonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>

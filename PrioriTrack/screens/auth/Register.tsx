@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {Login} from '../../util/Interfaces';
 import {
   View,
   Text,
@@ -7,51 +8,63 @@ import {
   StyleSheet,
 } from 'react-native';
 
-const RegisterForm: React.FC = () => {
-  const [name, setName] = useState<string>('');
+const RegisterForm = ({navigation}: Login) => {
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const handleRegister = () => {
-    // Perform registration logic here
-    console.log('Name:', name);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    // You can call an API or save the data to a database here
+    console.log('test');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your name"
-        value={name}
-        onChangeText={setName}
-      />
+      <Text style={styles.header}>
+        Sign<Text style={{color: 'green'}}>Up</Text>
+      </Text>
+      <View style={styles.formContainer}>
+        <Text style={styles.label}>First Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your FirstName"
+          value={firstName}
+          onChangeText={setFirstName}
+        />
+        <Text style={styles.label}>Last Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your FirstName"
+          value={lastName}
+          onChangeText={setLastName}
+        />
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
-      <Text style={styles.label}>Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Register</Text>
-      </TouchableOpacity>
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <Text style={styles.buttonText}>Register</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate({name: 'Login', params: {}})}>
+          <Text style={styles.hasAccount}>Have already an account?</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -62,6 +75,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
     backgroundColor: '#fff',
+  },
+  header: {
+    textAlign: 'center',
+    flexBasis: '15%',
+    marginTop: 100,
+    fontSize: 28,
+    fontWeight: 'bold',
+    fontFamily: 'fantasy',
+  },
+  formContainer: {
+    width: '100%',
+    flexBasis: '60%',
   },
   label: {
     fontSize: 16,
@@ -77,7 +102,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: '#2cb8e5',
+    backgroundColor: 'green',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 5,
@@ -87,6 +112,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  hasAccount: {
+    textAlign: 'center',
+    marginTop: 10,
   },
 });
 
