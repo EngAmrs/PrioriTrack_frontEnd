@@ -12,6 +12,7 @@ export interface Login {
 }
 
 export interface Task {
+  id: number;
   name: string;
   description: string;
   startDate: string;

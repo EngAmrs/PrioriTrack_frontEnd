@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CreateTask from '../screens/tasks/createTask/createTask';
+import ShowTasks from '../screens/tasks/showTasks/showTasks';
 
 MaterialCommunityIcons;
 
@@ -30,11 +31,11 @@ export default function TabBase() {
         }}
       />
       <Tab.Screen
-        name="tasks"
-        component={Home}
+        name="My Tasks"
+        component={ShowTasks}
         options={{
           tabBarLabel: 'My Tasks',
-          headerShown: false,
+          headerShown: true,
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({color, size}) => (
             <FontAwesome5 name="tasks" color={color} size={size} />

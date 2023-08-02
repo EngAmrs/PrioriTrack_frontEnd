@@ -1,18 +1,13 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Platform} from 'react-native';
+import {styles} from './style';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {Task} from '../../../util/Interfaces';
-import {Button} from '@rneui/base';
+// import {Task} from '../../../util/Interfaces';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CreateTask = () => {
+  // States
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [name, setName] = useState<string>('');
@@ -20,6 +15,35 @@ const CreateTask = () => {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
+  // Validations
+  const handleValidation = () => {
+    const nameIsValid = name.length <= 100;
+    const descriptionIsValid = description.length <= 300;
+
+    if (name.trim() === '' || !nameIsValid) {
+      Toast.show({
+        type: 'error',
+        text1: 'Name Field',
+        text2: 'Maximum Number of character is 100',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+      return;
+    }
+    if (description.trim() === '' || !descriptionIsValid) {
+      Toast.show({
+        type: 'error',
+        text1: 'Name Field',
+        text2: 'Maximum Number of character is 300',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+      return;
+    }
+    return true;
+  };
+
+  // Handle Start date
   const onStartChange = (event: any, selectedTime?: Date) => {
     const currentDate = selectedTime || startDate;
 
@@ -37,6 +61,11 @@ const CreateTask = () => {
     setStartDate(new Date(currentDate));
   };
 
+  const showStartPickerFunc = () => {
+    setShowStartPicker(true);
+  };
+
+  // Handle End date
   const onEndChange = (event: any, selectedTime?: Date) => {
     const currentDate = selectedTime || endDate;
     if (new Date(currentDate) < startDate) {
@@ -53,20 +82,63 @@ const CreateTask = () => {
     setEndDate(new Date(currentDate));
   };
 
-  const showStartPickerFunc = () => {
-    setShowStartPicker(true);
-  };
-
   const showEndPickerFunc = () => {
     setShowEndPicker(true);
   };
 
-  const handleChange = () => {
-    console.log('test');
+  // Create New Task
+  const resetFields = () => {
+    setName('');
+    setDescription('');
+    setStartDate(new Date());
+    setEndDate(new Date());
+    setShowStartPicker(false);
+    setShowEndPicker(false);
   };
+  const handleCreateTask = async () => {
+    if (!handleValidation()) {
+      return;
+    }
+    try {
+      const aCurrentTasks = await AsyncStorage.getItem('Tasks');
+      let currentTasks = aCurrentTasks ? JSON.parse(aCurrentTasks) : [];
+      console.log(currentTasks);
 
-  const handleCreateTask = () => {
-    console.log('test');
+      // Get current user
+      const aUser: any = await AsyncStorage.getItem('currentUser');
+      const currentUser: any = JSON.parse(aUser);
+
+      const taskData = {
+        id:
+          currentTasks.length !== 0
+            ? currentTasks[currentTasks.length - 1].id + 1
+            : 1,
+        name,
+        description,
+        startDate,
+        endDate,
+        userId: currentUser.id,
+      };
+      currentTasks.push(taskData);
+
+      await AsyncStorage.setItem('Tasks', JSON.stringify(currentTasks));
+      resetFields();
+      Toast.show({
+        type: 'success',
+        text1: 'Creation',
+        text2: 'Task is created successfully!',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Creation',
+        text2: 'Task is failed to get created!',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+    }
   };
 
   return (
@@ -75,13 +147,13 @@ const CreateTask = () => {
         style={styles.input}
         placeholder="Name"
         value={name}
-        onChangeText={text => handleChange('name', text)}
+        onChangeText={setName}
       />
       <TextInput
         style={styles.input}
         placeholder="Description"
         value={description}
-        onChangeText={text => handleChange('description', text)}
+        onChangeText={setDescription}
         multiline
       />
 
@@ -128,59 +200,5 @@ const CreateTask = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 20,
-  },
-  input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: 'green',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  timeButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  startButton: {
-    backgroundColor: '#48BF53',
-    padding: 10,
-    marginVertical: 5,
-    borderWidth: 1,
-    borderColor: '#fff',
-    borderRadius: 10,
-  },
-  endButton: {
-    backgroundColor: '',
-    padding: 10,
-    marginVertical: 5,
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 10,
-  },
-  startButtonText: {
-    fontSize: 18,
-    color: '#fff',
-  },
-  endButtonText: {
-    fontSize: 18,
-    color: '#555',
-  },
-  createText: {
-    color: '#fff',
-    fontSize: 18,
-  }
-});
 
 export default CreateTask;
