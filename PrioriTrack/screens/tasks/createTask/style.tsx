@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   startButton: {
-    backgroundColor: '#48BF53',
+    backgroundColor: '#444',
     padding: 10,
     marginVertical: 5,
     borderWidth: 1,

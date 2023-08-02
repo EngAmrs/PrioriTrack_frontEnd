@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Login, Task} from '../../../util/Interfaces';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -6,19 +6,42 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useFocusEffect} from '@react-navigation/native';
 import {styles} from './style';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {getUser} from '../../../util/getUser';
 
 const ShowTasks = ({navigation}: Login) => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [user, setUser] = useState<any>({});
 
-  useFocusEffect(() => {
-    const fetchTasks = async () => {
-      const aCurrentTasks = await AsyncStorage.getItem('Tasks');
-      let currentTasks = aCurrentTasks ? JSON.parse(aCurrentTasks) : [];
-      //   currentTasks = currentTasks.filter((t) => {t.userId === })
-      setTasks(currentTasks);
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchTasks = async () => {
+        const aCurrentTasks = await AsyncStorage.getItem('Tasks');
+        let currentTasks = aCurrentTasks ? JSON.parse(aCurrentTasks) : [];
+        currentTasks = currentTasks.filter((t: Task) => {
+          return t.userId === user.id;
+        });
+        sortTasks(currentTasks);
+        setTasks(currentTasks);
+      };
+      fetchTasks();
+    }, [user]),
+  );
+  useEffect(() => {
+    const currentUser = async () => {
+      const current = await getUser();
+      setUser(current);
     };
-    fetchTasks();
-  });
+    currentUser();
+  }, []);
+
+  // Sort Tasks
+  const sortTasks = (userTasks: Task[]) => {
+    userTasks.sort((a, b) => {
+      const start = new Date(a.startDate);
+      const end = new Date(b.endDate);
+      return start.getTime() - end.getTime();
+    });
+  };
 
   // Calculate Duration
   const calculateDuration = (start: Date, end: Date): string => {
@@ -41,6 +64,7 @@ const ShowTasks = ({navigation}: Login) => {
   // Handle Delete Task
   const handleDeleteTask = async (taskId: number) => {
     const updatedTasks = tasks.filter(task => task.id !== taskId);
+    setTasks(updatedTasks);
     await AsyncStorage.setItem('Tasks', JSON.stringify(updatedTasks));
   };
   return (
@@ -63,7 +87,7 @@ const ShowTasks = ({navigation}: Login) => {
                 <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() => handleDeleteTask(t.id)}>
-                    <FontAwesome5 name="trash" size={20} color={'darkred'} />
+                  <FontAwesome5 name="trash" size={20} color={'darkred'} />
                 </TouchableOpacity>
               </View>
             </View>

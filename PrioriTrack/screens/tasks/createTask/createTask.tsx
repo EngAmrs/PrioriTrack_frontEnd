@@ -5,7 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 // import {Task} from '../../../util/Interfaces';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getUser } from '../../../util/getUser';
+import {getUser} from '../../../util/getUser';
 
 const CreateTask = () => {
   // States

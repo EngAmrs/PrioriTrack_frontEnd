@@ -17,4 +17,5 @@ export interface Task {
   description: string;
   startDate: string;
   endDate: string;
+  userId: number;
 }
