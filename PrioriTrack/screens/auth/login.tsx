@@ -44,6 +44,8 @@ const LoginForm = ({navigation}: Login) => {
 
       if (user) {
         if (password.trim() === user.password) {
+          await AsyncStorage.setItem('currentUser', JSON.stringify(user));
+
           navigation.navigate({
             name: 'BottomTabs',
             params: {userId: user.id},

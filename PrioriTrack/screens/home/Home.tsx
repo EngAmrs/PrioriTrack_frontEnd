@@ -1,15 +1,23 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {useRoute} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Home = () => {
-  const route = useRoute();
-  const {userId} = route.params;
+  const [user, setUser] = useState<any>({});
+
+  useEffect(() => {
+    const getUser = async () => {
+      const aUser: any = await AsyncStorage.getItem('currentUser');
+      const currentUser: any = JSON.parse(aUser);
+      setUser(currentUser);
+    };
+    getUser();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>
-        Hello, <Text style={styles.userName}>John</Text>!
+        Hello, <Text style={styles.userName}>{user.firstName}</Text>!
       </Text>
-      <Text>User ID: {userId}</Text>
     </View>
   );
 };
