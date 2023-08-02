@@ -6,6 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CreateTask from '../screens/tasks/createTask/createTask';
 import MainTasks from './Tasks';
+import UserInfo from '../screens/userInfo/userInfo';
 
 MaterialCommunityIcons;
 
@@ -55,8 +56,8 @@ export default function TabBase() {
         }}
       />
       <Tab.Screen
-        name="settings"
-        component={Home}
+        name="UserInfo"
+        component={UserInfo}
         options={{
           tabBarLabel: '',
           headerShown: false,
