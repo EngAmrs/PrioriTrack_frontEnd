@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getUser} from '../../util/getUser';
+
 const Home = () => {
   const [user, setUser] = useState<any>({});
 
   useEffect(() => {
-    const getUser = async () => {
-      const aUser: any = await AsyncStorage.getItem('currentUser');
-      const currentUser: any = JSON.parse(aUser);
-      setUser(currentUser);
+    const currentUser = async () => {
+      const current = await getUser();
+      setUser(current);
     };
-    getUser();
+    currentUser();
   }, []);
 
   return (

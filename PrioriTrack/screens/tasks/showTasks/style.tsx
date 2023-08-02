@@ -6,6 +6,11 @@ export const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff',
     marginBottom: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tasks: {
+    width: '100%',
   },
   card: {
     backgroundColor: '#f0f0f0',
@@ -28,12 +33,12 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   viewDetailsButton: {
-    backgroundColor: 'blue',
+    backgroundColor: 'green',
     padding: 5,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 8,
-    flex: 1,
+    flex: 3,
     marginRight: 2,
   },
   viewDetailsButtonText: {
@@ -41,7 +46,6 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   deleteButton: {
-    backgroundColor: 'red',
     padding: 5,
     borderRadius: 8,
     alignItems: 'center',
@@ -51,5 +55,9 @@ export const styles = StyleSheet.create({
   deleteButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

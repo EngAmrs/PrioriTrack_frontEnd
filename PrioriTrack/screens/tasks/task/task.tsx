@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-
+import React from 'react';
+import {View, Text} from 'react-native';
+import {styles} from './style';
 const Task = ({route}: any) => {
   const {task} = route.params;
 
@@ -32,23 +32,4 @@ const Task = ({route}: any) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  taskInfo: {
-    flexDirection: 'row',
-    marginBottom: 10,
-  },
-  label: {
-    fontWeight: 'bold',
-    marginRight: 8,
-    width: 100,
-  },
-  text: {
-    flex: 1,
-  },
-});
 export default Task;

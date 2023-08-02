@@ -5,6 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 // import {Task} from '../../../util/Interfaces';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getUser } from '../../../util/getUser';
 
 const CreateTask = () => {
   // States
@@ -102,12 +103,9 @@ const CreateTask = () => {
     try {
       const aCurrentTasks = await AsyncStorage.getItem('Tasks');
       let currentTasks = aCurrentTasks ? JSON.parse(aCurrentTasks) : [];
-      console.log(currentTasks);
 
-      // Get current user
-      const aUser: any = await AsyncStorage.getItem('currentUser');
-      const currentUser: any = JSON.parse(aUser);
-
+      //get User
+      const user = await getUser();
       const taskData = {
         id:
           currentTasks.length !== 0
@@ -117,7 +115,7 @@ const CreateTask = () => {
         description,
         startDate,
         endDate,
-        userId: currentUser.id,
+        userId: user.id,
       };
       currentTasks.push(taskData);
 

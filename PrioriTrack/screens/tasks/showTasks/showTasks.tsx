@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useFocusEffect} from '@react-navigation/native';
 import {styles} from './style';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const ShowTasks = ({navigation}: Login) => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -43,29 +44,38 @@ const ShowTasks = ({navigation}: Login) => {
     await AsyncStorage.setItem('Tasks', JSON.stringify(updatedTasks));
   };
   return (
-    <ScrollView style={styles.container}>
-      {tasks.map(t => (
-        <View key={t.id} style={styles.card}>
-          <Text style={styles.taskName}>Name: {t.name}</Text>
-          <Text style={styles.duration}>
-            Duration:{' '}
-            {calculateDuration(new Date(t.startDate), new Date(t.endDate))}
-          </Text>
-          <View style={styles.buttons}>
-            <TouchableOpacity
-              style={styles.viewDetailsButton}
-              onPress={() => handleViewTaskDetails(t)}>
-              <Text style={styles.viewDetailsButtonText}>View Details</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={() => handleDeleteTask(t.id)}>
-              <Text style={styles.deleteButtonText}>Delete Task</Text>
-            </TouchableOpacity>
-          </View>
+    <View style={styles.container}>
+      {tasks.length > 0 ? (
+        <ScrollView style={styles.tasks}>
+          {tasks.map(t => (
+            <View key={t.id} style={styles.card}>
+              <Text style={styles.taskName}>Name: {t.name}</Text>
+              <Text style={styles.duration}>
+                Duration:{' '}
+                {calculateDuration(new Date(t.startDate), new Date(t.endDate))}
+              </Text>
+              <View style={styles.buttons}>
+                <TouchableOpacity
+                  style={styles.viewDetailsButton}
+                  onPress={() => handleViewTaskDetails(t)}>
+                  <Text style={styles.viewDetailsButtonText}>View Details</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => handleDeleteTask(t.id)}>
+                    <FontAwesome5 name="trash" size={20} color={'darkred'} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      ) : (
+        <View style={styles.center}>
+          <FontAwesome5 name="smile-beam" size={50} color={'#aaa'} />
+          <Text style={{color: '#aaa', marginTop: 10}}>No tasks to show</Text>
         </View>
-      ))}
-    </ScrollView>
+      )}
+    </View>
   );
 };
 
