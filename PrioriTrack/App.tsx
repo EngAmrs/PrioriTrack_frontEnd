@@ -21,7 +21,6 @@ export default function App(): JSX.Element {
             component={Main}
             options={{headerShown: false}}
           />
-          {/* <Stack.Screen name="Flights" component={FlightsTab} options={{ headerShown: true }} /> */}
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />
