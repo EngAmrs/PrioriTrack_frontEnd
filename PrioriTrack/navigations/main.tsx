@@ -6,7 +6,7 @@ import TabBase from './tab_base';
 const Stack = createStackNavigator();
 
 export default function MainNavigator() {
-  const user = false;
+  const user = true;
 
   return (
     <Stack.Navigator>

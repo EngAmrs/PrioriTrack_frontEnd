@@ -10,3 +10,10 @@ export interface Login {
   email: string;
   password: string;
 }
+
+export interface Task {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+}

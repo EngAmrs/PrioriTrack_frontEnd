@@ -4,6 +4,7 @@ import Home from '../screens/home/Home';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import CreateTask from '../screens/tasks/createTask/createTask';
 
 MaterialCommunityIcons;
 
@@ -41,11 +42,11 @@ export default function TabBase() {
         }}
       />
       <Tab.Screen
-        name="new_task"
-        component={Home}
+        name="Create a task"
+        component={CreateTask}
         options={{
           tabBarLabel: 'New Task',
-          headerShown: false,
+          headerShown: true,
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({color, size}) => (
             <Ionicons name="add-circle-outline" color={color} size={size} />
