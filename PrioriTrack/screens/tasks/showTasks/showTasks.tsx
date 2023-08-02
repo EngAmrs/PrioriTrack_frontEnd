@@ -13,6 +13,7 @@ const ShowTasks = ({navigation}: Login) => {
     const fetchTasks = async () => {
       const aCurrentTasks = await AsyncStorage.getItem('Tasks');
       let currentTasks = aCurrentTasks ? JSON.parse(aCurrentTasks) : [];
+      //   currentTasks = currentTasks.filter((t) => {t.userId === })
       setTasks(currentTasks);
     };
     fetchTasks();
@@ -33,7 +34,7 @@ const ShowTasks = ({navigation}: Login) => {
 
   // Navigate
   const handleViewTaskDetails = (task: Task) => {
-    navigation.navigate('TaskDetails', {task});
+    navigation.navigate('Task', {task});
   };
 
   // Handle Delete Task
