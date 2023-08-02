@@ -8,25 +8,42 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Linking,
 } from 'react-native';
 
 const LoginForm = ({navigation}: Login) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  const handleForgotPassword = () => {
+    const togglUrl = 'https://toggl.com/track/forgot-password/';
+    Linking.openURL(togglUrl).catch(error =>
+      console.error('Error opening URL:', error),
+    );
+  };
+
   const handleValidation = () => {
     const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const passwordIsValid = password.length >= 8;
 
-    if (!emailIsValid || !passwordIsValid) {
+    if (!emailIsValid) {
       Toast.show({
-        type: 'error',
-        text1: 'Invalid Input',
-        text2: 'Please enter a valid email and password.',
+        type: 'info',
+        text1: 'Email',
+        text2: 'Make sure the email format is correct',
         position: 'top',
         visibilityTime: 3000,
       });
-      return;
+      return false;
+    } else if (!passwordIsValid) {
+      Toast.show({
+        type: 'info',
+        text1: 'Password',
+        text2: 'Password must be at least 8 characters',
+        position: 'top',
+        visibilityTime: 3000,
+      });
+      return false;
     }
     return true;
   };
@@ -63,7 +80,7 @@ const LoginForm = ({navigation}: Login) => {
         Toast.show({
           type: 'error',
           text1: 'Login',
-          text2: 'User not registered. Please register first',
+          text2: 'Incorrect Email or Password',
           position: 'top',
           visibilityTime: 3000,
         });
@@ -102,26 +119,34 @@ const LoginForm = ({navigation}: Login) => {
           secureTextEntry
         />
         {/* Forgot Password */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate({name: 'Login', params: {}})}>
+        <TouchableOpacity onPress={handleForgotPassword}>
           <Text style={styles.forgotPass}>Forgot Password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity
+          disabled={email === '' || password === ''}
+          style={[
+            styles.button,
+            {
+              backgroundColor:
+                email === '' || password === '' ? '#ccc' : 'green',
+            },
+          ]}
+          onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.dividerContainer}>
-        <View style={styles.divider} />
-        <Text style={styles.dividerText}>OR</Text>
-        <View style={styles.divider} />
-      </View>
-      <View style={styles.registerContainer}>
-        <TouchableOpacity
-          style={styles.createAccountButton}
-          onPress={() => navigation.navigate({name: 'Register', params: {}})}>
-          <Text style={styles.createAccountButtonText}>Sign Up</Text>
-        </TouchableOpacity>
+        <View style={styles.dividerContainer}>
+          <View style={styles.divider} />
+          <Text style={styles.dividerText}>OR</Text>
+          <View style={styles.divider} />
+        </View>
+        <View style={styles.registerContainer}>
+          <TouchableOpacity
+            style={styles.createAccountButton}
+            onPress={() => navigation.navigate({name: 'Register', params: {}})}>
+            <Text style={styles.createAccountButtonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -144,7 +169,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    flexBasis: '30%',
+    flexBasis: '60%',
   },
   label: {
     fontSize: 16,
@@ -153,8 +178,8 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+    borderBottomColor: 'green',
+    borderBottomWidth: 3,
     borderRadius: 5,
     marginBottom: 16,
     paddingHorizontal: 10,
@@ -175,7 +200,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   dividerContainer: {
-    flexBasis: '10%',
+    flexBasis: '15%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -197,12 +222,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   createAccountButton: {
-    backgroundColor: '#777',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#999',
+    borderRadius: 10,
     padding: 15,
     width: '50%',
   },
   createAccountButtonText: {
-    color: '#fff',
+    color: '#000',
     fontWeight: 'bold',
     textAlign: 'center',
   },

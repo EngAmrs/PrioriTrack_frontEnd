@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderBottomColor: 'green',
     borderRadius: 5,
-    borderBottomWidth: 2,
+    borderBottomWidth: 3,
     marginBottom: 20,
     paddingHorizontal: 10,
   },

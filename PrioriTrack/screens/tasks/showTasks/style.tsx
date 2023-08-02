@@ -9,6 +9,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  header: {
+    fontSize: 21,
+    color: '#000',
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
   tasks: {
     width: '100%',
   },

@@ -69,6 +69,7 @@ const ShowTasks = ({navigation}: Login) => {
   };
   return (
     <View style={styles.container}>
+      <Text style={styles.header}>My Tasks</Text>
       {tasks.length > 0 ? (
         <ScrollView style={styles.tasks}>
           {tasks.map(t => (

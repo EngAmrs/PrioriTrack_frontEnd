@@ -11,7 +11,7 @@ export default function MainTasks() {
       <Stack.Screen
         name="ShowTasks"
         component={ShowTasks}
-        options={{headerShown: true, title: 'My Tasks'}}
+        options={{headerShown: false, title: 'My Tasks'}}
       />
       <Stack.Screen
         name="Task"

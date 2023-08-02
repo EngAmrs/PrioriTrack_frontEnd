@@ -25,7 +25,7 @@ const CreateTask = () => {
       Toast.show({
         type: 'error',
         text1: 'Name Field',
-        text2: 'Maximum Number of character is 100',
+        text2: 'Can not be blank or more than 100 character',
         position: 'top',
         visibilityTime: 3000,
       });
@@ -34,8 +34,8 @@ const CreateTask = () => {
     if (description.trim() === '' || !descriptionIsValid) {
       Toast.show({
         type: 'error',
-        text1: 'Name Field',
-        text2: 'Maximum Number of character is 300',
+        text1: 'Description Field',
+        text2: 'Can not be blank or more than 300 character',
         position: 'top',
         visibilityTime: 3000,
       });
@@ -43,12 +43,8 @@ const CreateTask = () => {
     }
     return true;
   };
-
-  // Handle Start date
-  const onStartChange = (event: any, selectedTime?: Date) => {
-    const currentDate = selectedTime || startDate;
-
-    if (new Date(currentDate) > endDate) {
+  const isEndAfterStart = (currentDate: Date, endTime: Date) => {
+    if (new Date(currentDate) > endTime) {
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -56,6 +52,17 @@ const CreateTask = () => {
         position: 'top',
         visibilityTime: 3000,
       });
+      setShowStartPicker(false);
+      setShowEndPicker(false);
+      return;
+    }
+    return true;
+  };
+  // Handle Start date
+  const onStartChange = (event: any, selectedTime?: Date) => {
+    const currentDate = selectedTime || startDate;
+
+    if (!isEndAfterStart(currentDate, endDate)) {
       return;
     }
     setShowStartPicker(Platform.OS === 'ios');
@@ -69,14 +76,7 @@ const CreateTask = () => {
   // Handle End date
   const onEndChange = (event: any, selectedTime?: Date) => {
     const currentDate = selectedTime || endDate;
-    if (new Date(currentDate) < startDate) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'End time cannot be earlier than the start time.',
-        position: 'top',
-        visibilityTime: 3000,
-      });
+    if (!isEndAfterStart(startDate, currentDate)) {
       return;
     }
     setShowEndPicker(Platform.OS === 'ios');
