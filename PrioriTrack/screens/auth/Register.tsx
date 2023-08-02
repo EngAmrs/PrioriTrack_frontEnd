@@ -166,13 +166,12 @@ const RegisterForm = ({navigation}: Login) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     paddingHorizontal: 20,
     backgroundColor: '#fff',
   },
   header: {
     textAlign: 'center',
-    flexBasis: '15%',
+    flexBasis: '10%',
     marginTop: 100,
     fontSize: 28,
     fontWeight: 'bold',
@@ -180,7 +179,12 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    flexBasis: '60%',
+    flex: 1,
+    borderWidth: 1,
+    padding: 10,
+    borderColor: '#aaa',
+    borderRadius: 10,
+    marginVertical: 25,
   },
   label: {
     fontSize: 16,
@@ -189,10 +193,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+    borderBottomColor: 'green',
     borderRadius: 5,
-    marginBottom: 16,
+    borderBottomWidth: 2,
+    marginBottom: 20,
     paddingHorizontal: 10,
   },
   button: {
